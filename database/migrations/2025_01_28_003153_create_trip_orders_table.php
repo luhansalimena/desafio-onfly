@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('from');
             $table->string('to');
             $table->dateTime('trip_date');
-            $table->string('trip_time');
+            $table->string('trip_return_date')->nullable();
             $table->timestamps();
         });
     }
