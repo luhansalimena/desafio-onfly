@@ -20,6 +20,12 @@ namespace App\Http\Controllers;
  *     url="http://localhost/api",
  *     description="Local API Server"
  * )
+ *  @OA\SecurityScheme(
+ *     securityScheme="bearerAuth",
+ *     type="http",
+ *     scheme="bearer",
+ *     bearerFormat="JWT"
+ * )
  */
 abstract class Controller
 {
