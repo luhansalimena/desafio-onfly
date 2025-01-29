@@ -14,12 +14,12 @@ return new class extends Migration
     {
         Schema::create('trip_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('requester_name');
             $table->enum('status', array_column(OrderStatus::cases(), 'name'))->default(OrderStatus::REQUESTED->value);
             $table->string('from');
             $table->string('to');
             $table->dateTime('trip_date');
             $table->string('trip_return_date')->nullable();
+            $table->foreignIdFor(\App\Models\User::class)->constrained();
             $table->timestamps();
         });
     }
