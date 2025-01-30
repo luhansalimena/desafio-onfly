@@ -15,6 +15,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         TripOrder::factory(10)->create();
+        TripOrder::factory(10)->create(
+            ['user_id' => 1]
+        );
 
         User::factory()->create([
             'name' => 'Test User',

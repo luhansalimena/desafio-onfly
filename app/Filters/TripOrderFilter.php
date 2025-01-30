@@ -15,4 +15,19 @@ class TripOrderFilter extends BaseFilter
     {
         return $this->builder->where('user_id', $value);
     }
+
+    public function to($value): Builder
+    {
+        return $this->builder->where('to', 'like', "%$value%");
+    }
+
+    public function tripDateFrom($value): Builder
+    {
+        return $this->builder->whereDate('trip_date', '>=', $value);
+    }
+
+    public function tripDateTo($value): Builder
+    {
+        return $this->builder->whereDate('trip_date', '<=', $value);
+    }
 }

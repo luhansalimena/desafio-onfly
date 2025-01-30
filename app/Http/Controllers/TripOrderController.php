@@ -87,6 +87,27 @@ class TripOrderController extends Controller
      *              default="REQUESTED"
      *          )
      *     ),
+     *     @OA\Parameter(
+     *         name="to",
+     *         in="query",
+     *         description="Filter by destination",
+     *         required=false,
+     *         @OA\Schema(type="string", default="São Paulo")
+     *     ),
+     *     @OA\Parameter(
+     *         name="tripDateFrom",
+     *         in="query",
+     *         description="Filter by trip start date",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date")
+     *     ),
+     *     @OA\Parameter(
+     *         name="tripDateTo",
+     *         in="query",
+     *         description="Filter by trip end date",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date")
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="List of trip orders",

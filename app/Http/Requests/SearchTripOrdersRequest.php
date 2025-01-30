@@ -24,7 +24,10 @@ class SearchTripOrdersRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['sometimes', 'string', Rule::in(array_column(OrderStatus::cases(), 'value'))]
+            'status' => ['sometimes', 'string', Rule::in(array_column(OrderStatus::cases(), 'value'))],
+            'to' => ['sometimes', 'string'],
+            'tripDateFrom' => ['sometimes', 'date'],
+            'tripDateTo' => ['sometimes', 'date'],
         ];
     }
 
