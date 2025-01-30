@@ -4,9 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\TripOrder;
 use App\Models\User;
+use App\Notifications\TripOrderStatusChanged;
 use App\OrderStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class UpdateTripOrdersTest extends TestCase
@@ -15,13 +17,22 @@ class UpdateTripOrdersTest extends TestCase
 
     public function test_update_trip_order_successfully(): void
     {
-        $user = User::factory()->create();
+        Notification::fake();
 
-        $tripOrder = TripOrder::factory()->create(['status' => OrderStatus::REQUESTED->value]);
+        $user = User::factory()->create();
+        $tripRequester = User::factory()->create();
+
+        $tripOrder = TripOrder::factory()->create(['status' => OrderStatus::REQUESTED->value,'user_id' => $tripRequester->id]);
+
 
         $response = $this->actingAs($user,'api')->putJson("/api/trip-orders/{$tripOrder->id}", [
             'status' => OrderStatus::APPROVED->value,
         ]);
+
+        Notification::assertSentTo(
+            [$tripRequester], TripOrderStatusChanged::class
+        );
+
 
         $response->assertStatus(200)
                  ->assertJson([
