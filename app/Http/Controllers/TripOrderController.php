@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Actions\TripOrders\CreateTripOrders;
 use App\Actions\TripOrders\SearchTripOrders;
+use App\Actions\TripOrders\UpdateTripOrders;
 use App\Http\Requests\SearchTripOrdersRequest;
 use App\Http\Requests\StoreTripOrderRequest;
+use App\Http\Requests\UpdateOrdersRequest;
+use App\Models\TripOrder;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -130,5 +133,55 @@ class TripOrderController extends Controller
     public function index(SearchTripOrdersRequest $request, SearchTripOrders $searchTripOrders)
     {
         return $searchTripOrders->execute($request->validated());
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/trip-orders/{id}",
+     *     summary="Update a trip order",
+     *     tags={"Trip Orders"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Trip order ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", enum={"REQUESTED", "APPROVED", "CANCELLED"}),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Trip order updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="status", type="string", example="APPROVED"),
+     *             @OA\Property(property="from", type="string", example="São Paulo"),
+     *             @OA\Property(property="to", type="string", example="Rio de Janeiro"),
+     *             @OA\Property(property="trip_date", type="string", format="date", example="2024-03-20"),
+     *             @OA\Property(property="trip_return_date", type="string", format="date", example="2024-03-25"),
+     *             @OA\Property(property="created_at", type="string", format="datetime"),
+     *             @OA\Property(property="updated_at", type="string", format="datetime")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Trip order not found"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     )
+     * )
+     */
+    public function update(UpdateOrdersRequest $request, TripOrder $tripOrder, UpdateTripOrders $updateTripOrders): JsonResponse
+    {
+        $tripOrder = $updateTripOrders->execute($tripOrder, $request->validated());
+
+        return response()->json($tripOrder);
     }
 }
