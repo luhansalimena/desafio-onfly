@@ -6,6 +6,7 @@ use App\Actions\TripOrders\CreateTripOrders;
 use App\Actions\TripOrders\SearchTripOrders;
 use App\Actions\TripOrders\UpdateTripOrders;
 use App\Http\Requests\SearchTripOrdersRequest;
+use App\Http\Requests\ShowTripOrderRequest;
 use App\Http\Requests\StoreTripOrderRequest;
 use App\Http\Requests\UpdateOrdersRequest;
 use App\Models\TripOrder;
@@ -203,6 +204,45 @@ class TripOrderController extends Controller
     {
         $tripOrder = $updateTripOrders->execute($tripOrder, $request->validated());
 
+        return response()->json($tripOrder);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/trip-orders/{id}",
+     *     summary="Get a trip order by ID",
+     *     tags={"Trip Orders"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Trip order ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Trip order retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="status", type="string", example="REQUESTED"),
+     *             @OA\Property(property="from", type="string", example="São Paulo"),
+     *             @OA\Property(property="to", type="string", example="Rio de Janeiro"),
+     *             @OA\Property(property="trip_date", type="string", format="datetime", example="2024-03-20"),
+     *             @OA\Property(property="trip_return_date", type="string", format="date", example="2024-03-25"),
+     *             @OA\Property(property="user_id", type="integer", example=18),
+     *             @OA\Property(property="created_at", type="string", format="datetime", example="2024-03-20T00:00:00.000000Z"),
+     *             @OA\Property(property="updated_at", type="string", format="datetime", example="2024-03-20T00:00:00.000000Z")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Trip order not found"
+     *     )
+     * )
+     */
+    public function show(ShowTripOrderRequest $request,TripOrder $tripOrder): JsonResponse
+    {
         return response()->json($tripOrder);
     }
 }

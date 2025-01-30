@@ -12,4 +12,5 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/trip-orders', [TripOrderController::class, 'store'])->name('trip-orders.store');
 
     Route::put('/trip-orders/{tripOrder}', [TripOrderController::class, 'update'])->name('trip-orders.update');
+    Route::get('/trip-orders/{tripOrder}', [TripOrderController::class, 'show'])->name('trip-orders.show');
 });
