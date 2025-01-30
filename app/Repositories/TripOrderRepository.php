@@ -35,4 +35,11 @@ class TripOrderRepository implements TripOrderRepositoryInterface
 
         return $query->get();
     }
+
+    public function update(TripOrder $tripOrder, array $data): TripOrder
+    {
+        $tripOrder->update($data);
+
+        return $tripOrder->fresh();
+    }
 }
