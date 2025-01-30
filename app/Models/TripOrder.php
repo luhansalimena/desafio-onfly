@@ -23,4 +23,9 @@ class TripOrder extends Model
     protected $casts = [
         'status' => OrderStatus::class,
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
