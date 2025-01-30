@@ -11,7 +11,6 @@ class TripOrder extends Model
     use HasFactory;
 
     protected $fillable = [
-        'requester_name',
         'status',
         'from',
         'to',
