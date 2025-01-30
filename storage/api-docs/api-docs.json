@@ -1,0 +1,618 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Desafio OnFly API",
+        "description": "API Documentation for Desafio OnFly application",
+        "contact": {
+            "name": "Luhan Salimena",
+            "email": "lsalimena6@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api",
+            "description": "Local API Server"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User authentication",
+                "description": "Login with email and password to get JWT token",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "user": {
+                                            "type": "object"
+                                        },
+                                        "authorization": {
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "example": "bearer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/trip-orders": {
+            "get": {
+                "tags": [
+                    "Trip Orders"
+                ],
+                "summary": "List all trip orders with filters",
+                "operationId": "cbe2f2fabfb5a26fda1f55e8bfc8e780",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter by status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "REQUESTED",
+                            "enum": [
+                                "REQUESTED",
+                                "APPROVED",
+                                "CANCELLED"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Filter by destination",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "São Paulo"
+                        }
+                    },
+                    {
+                        "name": "tripDateFrom",
+                        "in": "query",
+                        "description": "Filter by trip start date",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "tripDateTo",
+                        "in": "query",
+                        "description": "Filter by trip end date",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of trip orders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "REQUESTED"
+                                                    },
+                                                    "from": {
+                                                        "type": "string",
+                                                        "example": "São Paulo"
+                                                    },
+                                                    "to": {
+                                                        "type": "string",
+                                                        "example": "Rio de Janeiro"
+                                                    },
+                                                    "trip_date": {
+                                                        "type": "string",
+                                                        "format": "datetime",
+                                                        "example": "2024-03-20 00:00:00"
+                                                    },
+                                                    "trip_return_date": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "example": "2024-03-25"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 18
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "datetime",
+                                                        "example": "2024-03-20T00:00:00.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "datetime",
+                                                        "example": "2024-03-20T00:00:00.000000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "first_page_url": {
+                                            "type": "string",
+                                            "example": "http://localhost/api/trip-orders?page=1"
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "last_page_url": {
+                                            "type": "string",
+                                            "example": "http://localhost/api/trip-orders?page=2"
+                                        },
+                                        "links": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "url": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                    },
+                                                    "label": {
+                                                        "type": "string",
+                                                        "example": "1"
+                                                    },
+                                                    "active": {
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "next_page_url": {
+                                            "type": "string",
+                                            "example": "http://localhost/api/trip-orders?page=2",
+                                            "nullable": true
+                                        },
+                                        "path": {
+                                            "type": "string",
+                                            "example": "http://localhost/api/trip-orders"
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 15
+                                        },
+                                        "prev_page_url": {
+                                            "type": "string",
+                                            "nullable": true
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 15
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 19
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Trip Orders"
+                ],
+                "summary": "Create a new trip order",
+                "operationId": "a243e452a4c02cdb45bfabc1173fe6a3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "requester_name",
+                                    "status",
+                                    "from",
+                                    "to",
+                                    "trip_date",
+                                    "trip_return_date"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "requested"
+                                    },
+                                    "from": {
+                                        "type": "string",
+                                        "example": "São Paulo"
+                                    },
+                                    "to": {
+                                        "type": "string",
+                                        "example": "Rio de Janeiro"
+                                    },
+                                    "trip_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-03-20"
+                                    },
+                                    "trip_return_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-03-25"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Trip order created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "requested"
+                                        },
+                                        "from": {
+                                            "type": "string",
+                                            "example": "São Paulo"
+                                        },
+                                        "to": {
+                                            "type": "string",
+                                            "example": "Rio de Janeiro"
+                                        },
+                                        "trip_date": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2024-03-20"
+                                        },
+                                        "trip_return_date": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2024-03-25"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "datetime"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "datetime"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/trip-orders/{id}": {
+            "get": {
+                "tags": [
+                    "Trip Orders"
+                ],
+                "summary": "Get a trip order by ID",
+                "operationId": "8fae8bab7aaaf16bc377e62809cef64b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Trip order ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Trip order retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "REQUESTED"
+                                        },
+                                        "from": {
+                                            "type": "string",
+                                            "example": "São Paulo"
+                                        },
+                                        "to": {
+                                            "type": "string",
+                                            "example": "Rio de Janeiro"
+                                        },
+                                        "trip_date": {
+                                            "type": "string",
+                                            "format": "datetime",
+                                            "example": "2024-03-20"
+                                        },
+                                        "trip_return_date": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2024-03-25"
+                                        },
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": 18
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "datetime",
+                                            "example": "2024-03-20T00:00:00.000000Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "datetime",
+                                            "example": "2024-03-20T00:00:00.000000Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Trip order not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Trip Orders"
+                ],
+                "summary": "Update a trip order",
+                "operationId": "55932093d6545ee26d6a84421a70f1fd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Trip order ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "REQUESTED",
+                                            "APPROVED",
+                                            "CANCELLED"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Trip order updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "APPROVED"
+                                        },
+                                        "from": {
+                                            "type": "string",
+                                            "example": "São Paulo"
+                                        },
+                                        "to": {
+                                            "type": "string",
+                                            "example": "Rio de Janeiro"
+                                        },
+                                        "trip_date": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2024-03-20"
+                                        },
+                                        "trip_return_date": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2024-03-25"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "datetime"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "datetime"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Trip order not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Trip Orders",
+            "description": "API Endpoints for Trip Order management"
+        },
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        }
+    ]
+}
