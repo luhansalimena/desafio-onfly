@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\TripOrders\CreateTripOrders;
+use App\Actions\TripOrders\SearchTripOrders;
+use App\Http\Requests\SearchTripOrdersRequest;
 use App\Http\Requests\StoreTripOrderRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -56,5 +58,77 @@ class TripOrderController extends Controller
         $tripOrder = $createTripOrders->execute($request->validated());
 
         return response()->json($tripOrder, 201);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/trip-orders",
+     *     summary="List all trip orders with filters",
+     *     tags={"Trip Orders"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=1)
+     *     ),
+     *     @OA\Parameter(
+     *          name="status",
+     *          in="query",
+     *          description="Filter by status",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="string",
+     *              enum={"REQUESTED", "APPROVED", "CANCELLED"},
+     *              default="REQUESTED"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of trip orders",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="current_page", type="integer", example=1),
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="status", type="string", example="REQUESTED"),
+     *                     @OA\Property(property="from", type="string", example="São Paulo"),
+     *                     @OA\Property(property="to", type="string", example="Rio de Janeiro"),
+     *                     @OA\Property(property="trip_date", type="string", format="datetime", example="2024-03-20 00:00:00"),
+     *                     @OA\Property(property="trip_return_date", type="string", format="date", example="2024-03-25"),
+     *                     @OA\Property(property="user_id", type="integer", example=18),
+     *                     @OA\Property(property="created_at", type="string", format="datetime", example="2024-03-20T00:00:00.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="datetime", example="2024-03-20T00:00:00.000000Z")
+     *                 )
+     *             ),
+     *             @OA\Property(property="first_page_url", type="string", example="http://localhost/api/trip-orders?page=1"),
+     *             @OA\Property(property="from", type="integer", example=1),
+     *             @OA\Property(property="last_page", type="integer", example=2),
+     *             @OA\Property(property="last_page_url", type="string", example="http://localhost/api/trip-orders?page=2"),
+     *             @OA\Property(property="links", type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="url", type="string", nullable=true),
+     *                     @OA\Property(property="label", type="string", example="1"),
+     *                     @OA\Property(property="active", type="boolean", example=true)
+     *                 )
+     *             ),
+     *             @OA\Property(property="next_page_url", type="string", nullable=true, example="http://localhost/api/trip-orders?page=2"),
+     *             @OA\Property(property="path", type="string", example="http://localhost/api/trip-orders"),
+     *             @OA\Property(property="per_page", type="integer", example=15),
+     *             @OA\Property(property="prev_page_url", type="string", nullable=true),
+     *             @OA\Property(property="to", type="integer", example=15),
+     *             @OA\Property(property="total", type="integer", example=19)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     )
+     * )
+     */
+    public function index(SearchTripOrdersRequest $request, SearchTripOrders $searchTripOrders)
+    {
+        return $searchTripOrders->execute($request->validated());
     }
 }
