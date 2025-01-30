@@ -4,7 +4,7 @@ namespace App;
 
 enum OrderStatus: string
 {
-    case REQUESTED = 'requested';
-    case APPROVED = 'approved';
-    case CANCELLED = 'cancelled';
+    case REQUESTED = 'REQUESTED';
+    case APPROVED = 'APPROVED';
+    case CANCELLED = 'CANCELLED';
 }
