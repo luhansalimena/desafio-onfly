@@ -31,7 +31,7 @@ class SearchTripOrdersRequest extends FormRequest
     public function prepareForValidation(): void
     {
         $this->merge([
-            'status' => strtolower($this->status),
+            'status' => (string) str($this->status)->upper(),
         ]);
     }
 }

@@ -37,7 +37,7 @@ class SeachTripOrdersTest extends TestCase
 
         $response->assertJsonFragment([
             'id' => $validTrip->id,
-            'status' => str($validTrip->status)->upper(),
+            'status' => $validTrip->status->name,
             'from' => $validTrip->from,
             'to' => $validTrip->to,
             'trip_date' => $validTrip->trip_date,
@@ -50,9 +50,9 @@ class SeachTripOrdersTest extends TestCase
         $user = User::factory()->create();
 
         TripOrder::factory(10)->create();
-        $validTrip = TripOrder::factory()->create(['user_id' => $user->id, 'status' => 'requested']);
+        $validTrip = TripOrder::factory()->create(['user_id' => $user->id, 'status' => 'REQUESTED']);
 
-        $response = $this->actingAs($user, 'api')->get(route('trip-orders.index', ['status' => 'requested']));
+        $response = $this->actingAs($user, 'api')->get(route('trip-orders.index', ['status' => 'REQUESTED']));
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -71,7 +71,7 @@ class SeachTripOrdersTest extends TestCase
 
         $response->assertJsonFragment([
             'id' => $validTrip->id,
-            'status' => str($validTrip->status)->upper(),
+            'status' => $validTrip->status->name,
             'from' => $validTrip->from,
             'to' => $validTrip->to,
             'trip_date' => $validTrip->trip_date,
@@ -83,9 +83,7 @@ class SeachTripOrdersTest extends TestCase
     {
         $user = User::factory()->create();
 
-        TripOrder::factory(10)->create();
-
-        $response = $this->actingAs($user, 'api')->get(route('trip-orders.index', ['status' => 'invalid_status']));
+        $response = $this->actingAs($user, 'api')->get(route('trip-orders.index', ['status' => 'invalid_status']), ['Accept' => 'application/json']);
 
         $response->assertStatus(422);
         $response->assertJsonStructure([
