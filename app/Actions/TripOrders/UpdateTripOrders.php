@@ -3,6 +3,7 @@
 namespace App\Actions\TripOrders;
 
 use App\Models\TripOrder;
+use App\Notifications\TripOrderStatusChanged;
 use App\OrderStatus;
 use App\Repositories\Interface\TripOrderRepositoryInterface;
 use Illuminate\Validation\ValidationException;
@@ -22,6 +23,10 @@ class UpdateTripOrders
             throw ValidationException::withMessages(['Cannot update order status to ' . $data['status']]);
         }
 
-        return $this->tripOrderRepository->update($tripOrder, $data);
+        $tripOrder = $this->tripOrderRepository->update($tripOrder, $data);
+
+        $tripOrder->user->notify(new TripOrderStatusChanged($data['status']));
+
+        return $tripOrder;
     }
 }
