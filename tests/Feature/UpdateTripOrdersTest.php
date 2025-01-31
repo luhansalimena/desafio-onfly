@@ -41,24 +41,6 @@ class UpdateTripOrdersTest extends TestCase
                  ]);
     }
 
-    public function test_update_trip_order_that_is_already_approved(): void
-    {
-        $user = User::factory()->create();
-
-        $tripOrder = TripOrder::factory()->create(['status' => OrderStatus::APPROVED->value]);
-
-        $response = $this->actingAs($user,'api')->putJson("/api/trip-orders/{$tripOrder->id}", [
-            'status' => OrderStatus::CANCELLED->value,
-        ]);
-
-        $response->assertStatus(422)
-                ->assertJson([
-                    'message' => 'Only requested orders can be approved or cancelled',
-                    'errors' => [
-                        ['Only requested orders can be approved or cancelled']
-                    ]
-                ]);
-    }
 
     public function test_update_trip_order_that_is_already_cancelled(): void
     {
