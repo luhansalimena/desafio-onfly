@@ -14,10 +14,10 @@ class UpdateOrdersRequest extends FormRequest
     public function authorize(): bool
     {
         if(auth()->user()->id == $this->tripOrder->user_id) {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
